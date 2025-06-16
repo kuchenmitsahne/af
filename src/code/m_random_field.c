@@ -185,7 +185,7 @@ RandomFieldGate gate3_type0_lt[3] = { GATE(2, 0, 2, 1), GATE(8, 0, 8, 1), GATE(1
 RandomFieldGate gate3_type0_dn[3] = { GATE(15, 2, 14, 2), GATE(15, 8, 14, 8), GATE(15, 12, 14, 12) };
 RandomFieldGate gate3_type0_rt[3] = { GATE(2, 15, 2, 14), GATE(8, 15, 8, 14), GATE(12, 15, 12, 14) };
 
-RandomFieldGate* mRF_gate_correct_info[mRF_GATE_TYPE_NUM][RANDOM_FIELD_DIRECT_NUM] = {
+RandomFieldGate* mRF_gate_correct_info[mRF_GATE_TYPE_NUM][mRF_DIRECT_NUM] = {
   { NULL, NULL, NULL, NULL },
   { gate1_type0_up, gate1_type0_lt, gate1_type0_dn, gate1_type0_rt },
   { gate1_type1_up, gate1_type1_lt, gate1_type1_dn, gate1_type1_rt },
@@ -196,7 +196,7 @@ RandomFieldGate* mRF_gate_correct_info[mRF_GATE_TYPE_NUM][RANDOM_FIELD_DIRECT_NU
 
 // Order of gate types for each block is north, west, south, east.
 // Provided indices correspond to block type, not struct size
-u8 mRF_gate_info2[mFM_BLOCK_TYPE_NUM][RANDOM_FIELD_DIRECT_NUM] = {
+u8 mRF_gate_info2[mFM_BLOCK_TYPE_NUM][mRF_DIRECT_NUM] = {
     /* 0x00 */ {
         mRF_GATE_NONE,
         mRF_GATE_NONE,
@@ -817,7 +817,7 @@ s32 mRF_BlockInf2CheckBeastRoad(u8 blockType, mCoBG_unkStructUnion* collisionDat
     s32 changedAttributeCount = 0;
     xyz_t wpos = { 0.0f, 0.0f, 0.0f };
 
-    for (i = 0; i < RANDOM_FIELD_DIRECT_NUM; i++) {
+    for (i = 0; i < mRF_DIRECT_NUM; i++) {
         gateP = mRF_BlockTypeDirect2GateData(&gateCount, blockType, i);
 
         if (gateP != NULL) {

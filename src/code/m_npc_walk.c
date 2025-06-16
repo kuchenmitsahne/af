@@ -622,15 +622,15 @@ s32 mNpcW_GetNearGate(s32* targetUtX, s32* targetUtZ, s32 blockX, s32 blockZ, s3
 
         if (x < z) {
             if (utX < (UT_X_NUM / 2)) {
-                direction = RANDOM_FIELD_DIRECT_WEST;
+                direction = mRF_DIRECT_WEST;
             } else {
-                direction = RANDOM_FIELD_DIRECT_EAST;
+                direction = mRF_DIRECT_EAST;
             }
         } else {
             if (utZ < (UT_Z_NUM / 2)) {
-                direction = RANDOM_FIELD_DIRECT_NORTH;
+                direction = mRF_DIRECT_NORTH;
             } else {
-                direction = RANDOM_FIELD_DIRECT_SOUTH;
+                direction = mRF_DIRECT_SOUTH;
             }
         }
 
@@ -641,7 +641,7 @@ s32 mNpcW_GetNearGate(s32* targetUtX, s32* targetUtZ, s32 blockX, s32 blockZ, s3
                 x = gate->ut1 & 0xF;
                 z = gate->ut1 >> 4;
 
-                if (direction == RANDOM_FIELD_DIRECT_WEST || direction == RANDOM_FIELD_DIRECT_WEST) {
+                if (direction == mRF_DIRECT_WEST || direction == mRF_DIRECT_WEST) {
                     difference = utZ - z;
                     difference = ABS(difference);
                 } else {

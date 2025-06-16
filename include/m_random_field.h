@@ -6,15 +6,15 @@
 #include "game.h"
 #include "m_field_make.h"
 
-#define RANDOM_FIELD_DIRECT_ERROR 100
+#define mRF_DIRECT_ERROR 100
 
 typedef enum RandomFieldDirection {
-  /* 0 */ RANDOM_FIELD_DIRECT_NORTH,
-  /* 1 */ RANDOM_FIELD_DIRECT_WEST,
-  /* 2 */ RANDOM_FIELD_DIRECT_SOUTH,
-  /* 3 */ RANDOM_FIELD_DIRECT_EAST,
+  /* 0 */ mRF_DIRECT_NORTH,
+  /* 1 */ mRF_DIRECT_WEST,
+  /* 2 */ mRF_DIRECT_SOUTH,
+  /* 3 */ mRF_DIRECT_EAST,
 
-  /* 4 */ RANDOM_FIELD_DIRECT_NUM
+  /* 4 */ mRF_DIRECT_NUM
 } RandomFieldDirection;
 
 typedef enum RandomFieldGateType {
