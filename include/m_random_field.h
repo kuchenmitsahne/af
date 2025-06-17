@@ -17,6 +17,27 @@ typedef enum RandomFieldDirection {
   /* 4 */ mRF_DIRECT_NUM
 } RandomFieldDirection;
 
+typedef enum RandomFieldRiver {
+  /* 0 */ mRF_RIVER0,
+  /* 1 */ mRF_RIVER1,
+  /* 2 */ mRF_RIVER2,
+  /* 3 */ mRF_RIVER3,
+  /* 4 */ mRF_RIVER4,
+  /* 5 */ mRF_RIVER5,
+  /* 6 */ mRF_RIVER6,
+
+  /* 7 */  mRF_RIVER_NUM
+} RandomFieldRiver;
+
+typedef enum RandomFieldStep {
+  /* 0 */ mRF_FIELD_STEP1,  /* first level */
+  /* 1 */ mRF_FIELD_STEP2,  /* second level*/
+  /* 2 */ mRF_FIELD_STEP3,  /* third level */
+  /* 3 */ mRF_FIELD_STEP4,  /* fourth level */
+
+  /* 4 */  mRF_FIELD_STEP_NUM
+} RandomFieldStep;
+
 typedef enum RandomFieldGateType {
   /* 0 */ mRF_GATE_NONE,
   /* 1 */ mRF_GATE1_TYPE0,

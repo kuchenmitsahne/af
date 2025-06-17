@@ -1078,9 +1078,9 @@
     compress: True
     bss_size: 0x270
     subsegments:
-      - [0x81AA60, asm, overlays/other_ovl/m_random_field_ovl/m_random_field_ovl]
-      - [0x81D2E0, data, overlays/other_ovl/m_random_field_ovl/m_random_field_ovl]
-      - [0x81D500, rodata, overlays/other_ovl/m_random_field_ovl/m_random_field_ovl]
+      - [0x81AA60, c, overlays/other_ovl/m_random_field_ovl/m_random_field_ovl]
+      - [0x81D2E0, .data, overlays/other_ovl/m_random_field_ovl/m_random_field_ovl]
+      - [0x81D500, .rodata, overlays/other_ovl/m_random_field_ovl/m_random_field_ovl]
       - { start: 0x81D540, type: bss, vram: 0x809252E0, name: overlays/other_ovl/m_random_field_ovl/m_random_field_ovl }
   - name: m_random_field_ovl_reloc
     type: code
