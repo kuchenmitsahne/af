@@ -2,6 +2,7 @@
 #include "m_random_field.h"
 
 #include "m_common_data.h"
+#include "sys_math.h"
 
 typedef enum RandomFieldBit {
   /* 0 */ mRF_BIT_SLOPE_LEFT,
@@ -170,25 +171,49 @@ mRF_trace_data_c* l_river_next_data[] = {
   &l_river7_next_class
 };
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/other_ovl/m_random_field_ovl/m_random_field_ovl/mRF_GetRandom.s")
+s32 mRF_GetRandom(s32 max) {
+    return RANDOM(max);
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/other_ovl/m_random_field_ovl/m_random_field_ovl/mRF_D2ToD1.s")
+s32 mRF_D2ToD1(s32 blockX, s32 blockZ) {
+  return blockZ * BLOCK_X_NUM + blockX;
+}
 
-// static in AC, ?? in AF
-s32 x_offset[mRF_DIRECT_NUM] = { 0, -1, 0, 1 };
-s32 z_offset[mRF_DIRECT_NUM] = { -1, 0, 1, 0 };
+void mRF_Direct2BlockNo(s32* blockX, s32* blockZ, s32 baseBlockX, s32 baseBlockZ, u8 direct) {
+  static s32 x_offset[mRF_DIRECT_NUM] = { 0, -1, 0, 1 };
+  static s32 z_offset[mRF_DIRECT_NUM] = { -1, 0, 1, 0 };
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/other_ovl/m_random_field_ovl/m_random_field_ovl/mRF_Direct2BlockNo.s")
+  blockX[0] = baseBlockX + x_offset[direct];
+  blockZ[0] = baseBlockZ + z_offset[direct];
+}
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/other_ovl/m_random_field_ovl/m_random_field_ovl/mRF_CheckCorrectBlockNo.s")
+s32 mRF_CheckCorrectBlockNo(s32 blockX, s32 blockZ, s32 blockXMin, s32 blockXMax, s32 blockZMin, s32 blockZMax) {
+  if (blockX < blockXMin) {
+    return FALSE;
+  }
+
+  if (blockX > blockXMax) {
+    return FALSE;
+  }
+
+  if (blockZ < blockZMin) {
+    return FALSE;
+  }
+
+  if (blockZ > blockZMax) {
+    return FALSE;
+  }
+
+  return TRUE;
+}
 
 typedef struct block_group_s {
   s32 min;
   s32 max;
 } mRF_BlockGroup_c;
 
-// static in AC, ?? in AF
-mRF_BlockGroup_c blockGroup[9] = {
+s32 mRF_CheckBlockGroup(u8 type, s32 group) {
+  static mRF_BlockGroup_c blockGroup[9] = {
     { mFM_BLOCK_TYPE_CLIFF_HORIZONTAL, mFM_BLOCK_TYPE_CLIFF_CORNER_LEFT_BOTTOM },
     { mFM_BLOCK_TYPE_RIVER_SOUTH, mFM_BLOCK_TYPE_RIVER_WEST_SOUTH },
     { mFM_BLOCK_TYPE_RIVER_SOUTH_BRIDGE, mFM_BLOCK_TYPE_RIVER_WEST_SOUTH_BRIDGE },
@@ -198,11 +223,39 @@ mRF_BlockGroup_c blockGroup[9] = {
     { mFM_BLOCK_TYPE_RIVER_EAST_CLIFF_HORIZONTAL, mFM_BLOCK_TYPE_RIVER_EAST_CLIFF_CORNER_LEFT_TOP },
     { mFM_BLOCK_TYPE_RIVER_WEST_CLIFF_HORIZONTAL, mFM_BLOCK_TYPE_WATERFALL_WEST_CLIFF_CORNER_LEFT_BOTTOM },
     { 0, 0 }
-};
+  };
+  mRF_BlockGroup_c block_group;
+  
+  if (group == mRF_BLOCK_GROUP_CLIFF_ANY) {
+    /* Check any acre with a cliff in it, even if it has rivers or slopes */
+    if (
+      (type >= blockGroup[mRF_BLOCK_GROUP_CLIFF].min && type <= blockGroup[mRF_BLOCK_GROUP_CLIFF].max) ||
+      (type >= blockGroup[mRF_BLOCK_GROUP_SLOPE].min && type <= blockGroup[mRF_BLOCK_GROUP_SLOPE].max) ||
+      (type >= blockGroup[mRF_BLOCK_GROUP_RIVER_CLIFF_ANY].min && type <= blockGroup[mRF_BLOCK_GROUP_RIVER_CLIFF_ANY].max)
+    ) {
+      return TRUE;
+    }
+    return FALSE;
+  }
+  else {
+    block_group = blockGroup[group];
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/other_ovl/m_random_field_ovl/m_random_field_ovl/mRF_CheckBlockGroup.s")
+    if (type >= block_group.min && type <= block_group.max) {
+      return TRUE;
+    }  
+  }
 
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/other_ovl/m_random_field_ovl/m_random_field_ovl/mRF_CpyBlockData.s")
+  return FALSE;
+}
+
+
+void mRF_CpyBlockData(u8* dst, u8* src) {
+  s32 i;
+
+  for (i = 0; i < BLOCK_TOTAL_NUM; i++) {
+    *dst++ = *src++;
+  }
+}
 
 #pragma GLOBAL_ASM("asm/jp/nonmatchings/overlays/other_ovl/m_random_field_ovl/m_random_field_ovl/mRF_TraceCliffBlock.s")
 
